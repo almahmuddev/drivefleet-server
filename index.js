@@ -11,17 +11,27 @@ const { router: bookingsRouter, init: initBookings } = require("./routes/booking
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Middleware
+// allowed origins — local + your deployed Vercel URL
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: (origin, callback) => {
+      // allow requests with no origin (e.g. mobile apps, curl)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 
-// MongoDB setup
 const client = new MongoClient(process.env.MONGODB_URI, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -39,16 +49,13 @@ async function run() {
     const cars = db.collection("cars");
     const bookings = db.collection("bookings");
 
-    // inject collections into route handlers
     initCars(cars);
     initBookings(bookings, cars);
 
-    // Routes
     app.use("/auth", authRouter);
     app.use("/cars", carsRouter);
     app.use("/bookings", bookingsRouter);
 
-    // Health check
     app.get("/", (req, res) => {
       res.json({ status: "DriveFleet API is running" });
     });
