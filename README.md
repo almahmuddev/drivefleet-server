@@ -6,6 +6,15 @@ REST API for the DriveFleet car rental platform.
 **Base URL (production):** `https://drivefleet-server-qlax.onrender.com`
 
 
+## Setup
+
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Copy `.env.example` to `.env` and configure your environment variables
+4. Run development server: `npm run dev`
+5. Run production server: `npm start`
+
+
 ## Endpoints
 
 | Method | Route | Auth | Description |
