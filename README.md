@@ -2,8 +2,8 @@
 
 REST API for the DriveFleet car rental platform.
 
-**Base URL (production):** `#`
 
+**Base URL (production):** `https://drivefleet-server-qlax.onrender.com`
 
 
 ## Endpoints
